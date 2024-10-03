@@ -4,8 +4,8 @@ import java.time.LocalDate;
 
 public class Income extends Transaction {
     private EIncomeCategory category;
-    public Income(double sum, LocalDate date, User user, EIncomeCategory category) {
-        super(sum, date, user);
+    public Income(double amount, LocalDate date, User user, EIncomeCategory category) {
+        super(amount, date, user);
         this.category = category;
     }
 
