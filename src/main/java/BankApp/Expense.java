@@ -18,4 +18,11 @@ public class Expense extends Transaction {
     public void setCategory(EExpenseCategory category) {
         this.category = category;
     }
+
+    @Override
+    public String toString() {
+        return "Date: " + getDate().toString() +
+                "\nCategory: " + category +
+                "\nAmount= " + getAmount();
+    }
 }
