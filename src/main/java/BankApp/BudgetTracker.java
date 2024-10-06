@@ -87,14 +87,37 @@ public class BudgetTracker {
                             int year = InputManager.intInput();
                             System.out.println("Enter month of transaction: ");
                             int month = InputManager.intInput();
-                            System.out.println("Enter day of month of transaction: ");
-                            int date = InputManager.intInput();
-                            LocalDate transactionDate = LocalDate.of(year, month, date);
+                            //Set days to 1 to only compare year and month
+                            LocalDate searchDate = LocalDate.of(year, month, 1);
+                            List<Expense> expenseMatches = new ArrayList<>();
+
 
                             for (Expense expense1 : expenses) {
-                                if (expense1.getDate().equals(transactionDate)) {
-                                    System.out.println(expense1);
+                                LocalDate expenseDate = expense1.getDate();
+                                //Set dateMinusDays to only compare years and months
+                                LocalDate dateMinusDays = LocalDate.of(expenseDate.getYear(), expenseDate.getMonth(), 1);
+                                if (dateMinusDays.equals(searchDate)) {
+                                    expenseMatches.add(expense1);
                                 }
+                            }
+
+                            if (expenseMatches.isEmpty()) {
+                                System.out.printf("No transactions found at %s - %s\n", year, month);
+                            } else {
+                                System.out.println("Matches:");
+                                int j = 0;
+                                for (Expense expense1 : expenseMatches) {
+                                    j++;
+                                    System.out.printf("%d: Date: %s - Amount: %s - Category: %s\n",
+                                            j,
+                                            expense1.getDate(),
+                                            expense1.getAmount(),
+                                            expense1.getCategory());
+                                }
+                                System.out.println("Which transaction would you like to remove?");
+                                int idToRemove = InputManager.intInput(1, expenseMatches.size());
+                                ExpenseStorage.removeExpense(expenseMatches.get(idToRemove-1));
+                                System.out.printf("Transaction %d has successfully been removed\n", idToRemove);
                             }
                             continue;
                     }
