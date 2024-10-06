@@ -3,9 +3,9 @@ package BankApp;
 import java.time.LocalDate;
 
 public class Transaction {
-    private User user;
-    private double amount;
-    private LocalDate date;
+    public static User user;
+    public static double amount;
+    public static LocalDate date;
 
     public Transaction(double amount, LocalDate date, User user) {
         this.amount = amount;

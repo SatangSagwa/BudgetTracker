@@ -10,7 +10,6 @@ public class Expense extends Transaction {
         this.category = category;
     }
 
-
     public EExpenseCategory getCategory() {
         return category;
     }
