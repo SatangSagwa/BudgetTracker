@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class BudgetTracker {
@@ -85,19 +86,21 @@ public class BudgetTracker {
                             LocalDate searchDate = LocalDate.of(year, month, 1);
 
                             //List for all expenses
-                            List<Expense> expenses = ExpenseStorage.getExpenses();
+                            HashMap<Expense, Transaction> expenses = ExpenseStorage.getExpenses();
                             //Empty list only for matching expenses
-                            List<Expense> expenseMatches = new ArrayList<>();
+                            HashMap<Integer, Expense> expenseMatches = new HashMap<>();
 
                             //Iterate expenses
-                            for (Expense expense1 : expenses) {
+                            int j = 0;
+                            for (Transaction transaction : expenses.values()) {
                                 //Get date of each expense
-                                LocalDate expenseDate = expense1.getDate();
+                                LocalDate expenseDate = transaction.getDate();
                                 //Set dateMinusDays to only compare years and months
                                 LocalDate dateMinusDays = LocalDate.of(expenseDate.getYear(), expenseDate.getMonth(), 1);
                                 //Add to matches list if it matches the search date
                                 if (dateMinusDays.equals(searchDate)) {
-                                    expenseMatches.add(expense1);
+                                    //expenseMatches.put(j, expense);
+                                    j++;
                                 }
                             }
 
@@ -105,18 +108,22 @@ public class BudgetTracker {
                                 System.out.printf("No transactions found at %s - %s\n", year, month);
                             } else {
                                 System.out.println("Matches:");
-                                int j = 0;
-                                for (Expense expense1 : expenseMatches) {
-                                    j++;
-                                    System.out.printf("%d: Date: %s - Amount: %s - Category: %s\n",
-                                            j,
-                                            expense1.getDate(),
-                                            expense1.getAmount(),
-                                            expense1.getCategory());
+                                int matchID = 0;
+
+
+                                for (Transaction transaction : expenseMatches.values()) {
+                                    matchID++;
+                                    System.out.printf("%d: Date: %s - Amount: %s\n",
+                                            matchID,
+                                            transaction.getDate(),
+                                            transaction.getAmount());
                                 }
                                 System.out.println("Which transaction would you like to remove?");
                                 int idToRemove = InputManager.intInput(1, expenseMatches.size());
-                                ExpenseStorage.removeExpense(expenseMatches.get(idToRemove-1));
+                                for (Transaction transaction : expenseMatches.values()) {
+                                    //if (transaction == )
+                                    //eStorage.removeExpense(expenseMatches.get(id));
+                                }
                             }
                             continue;
                     }

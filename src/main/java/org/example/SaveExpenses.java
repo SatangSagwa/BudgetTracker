@@ -1,12 +1,13 @@
 package org.example;
 
+import BankApp.EExpenseCategory;
 import BankApp.Expense;
-import BankApp.ExpenseStorage;
+import BankApp.User;
 import com.google.gson.Gson;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
+import java.time.LocalDate;
 
 public class SaveExpenses {
     public static void main(String[] args) throws IOException {
@@ -14,10 +15,10 @@ public class SaveExpenses {
         String filePath = "src/main/ExpenseStorage.json";
         FileWriter fileWriter = new FileWriter(filePath);
 
-        List<Expense> expenses = ExpenseStorage.getExpenses();
-        //expenses.add(new Expense(500, LocalDate.now(), new User("Em", "i"), EExpenseCategory.ENTERTAINMENT));
-        System.out.println(expenses);
-        gson.toJson(expenses, fileWriter);
-        fileWriter.close();
+        //HashMap<Integer, Expense> expenses = ExpenseStorage.getExpenses();
+        Expense expense = new Expense(500, LocalDate.now(), new User("Emilia", "Ivarsson"), EExpenseCategory.SHOPPING);
+        //System.out.println(expenses);
+        //gson.toJson(expenses, fileWriter);
+        fileWriter.flush();
     }
 }
