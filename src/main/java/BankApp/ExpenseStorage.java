@@ -8,26 +8,30 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class ExpenseStorage {
-    private static final Gson gson = new Gson();
-    private static final String filePath = "src/main/ExpenseStorage.json";
+    private final Gson gson = new Gson();
+    private final String filePath = "src/main/ExpenseStorage.json";
 
-    private static HashMap<String, Expense> expenses = new HashMap<>();
+    private HashMap<StringBuilder, Expense> expenses = new HashMap<>();
+    private StringBuilder expenseID = new StringBuilder("00");
+    private int index = 1;
 
-    public static void loadExpenses() {
+    public void loadExpenses() {
         Gson gson = new Gson();
         try {
-            FileReader fr = new FileReader("src/main/ExpenseStorage.json");
-            expenses.put(gson.fromJson(fr, String.class), gson.fromJson(fr, Expense.class));
+            FileReader fr = new FileReader(filePath);
+            expenses.put(gson.fromJson(filePath, StringBuilder.class), gson.fromJson(filePath, Expense.class));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void addExpense(String id, Expense expense) throws IOException {
+    public void addExpense(Expense expense) throws IOException {
         FileWriter fileWriter = new FileWriter(filePath);
-        expenses.put(id, expense);
+        StringBuilder id = expenseID.append(index++);
+        expenses.put(new StringBuilder(id), expense);
         gson.toJson(expenses, fileWriter);
         fileWriter.close();
+        expenseID.deleteCharAt(2);
 
         System.out.printf("%s %s have added a new transaction\n" +
                 "Sum: %.2f\n" +
@@ -40,12 +44,18 @@ public class ExpenseStorage {
                 expense.getDate().toString());
     }
 
-    public static Expense getExpense(Expense expense) {
-        return expense;
+    public Expense getExpense(StringBuilder ID) {
+        for (StringBuilder key : expenses.keySet()) {
+            if (ID.toString().equals(key.toString())) {
+                return expenses.get(key);
+            }
+        }
+        System.out.println("ID: " + ID + " not found!");
+        return null;
     }
 
 
-    public static void removeExpense(Expense expense) throws IOException {
+    public void removeExpense(Expense expense) throws IOException {
         FileWriter fileWriter = new FileWriter(filePath);
         expenses.remove(expense);
         gson.toJson(expenses, fileWriter);
@@ -53,11 +63,15 @@ public class ExpenseStorage {
         System.out.printf("Transaction: %s has successfully been removed.", expense.toString());
     }
 
-    public static HashMap<String, Expense> getExpenses() {
+    public HashMap<StringBuilder, Expense> getExpenses() {
         return expenses;
     }
 
     public void listExpenses() {
+        for (StringBuilder key : expenses.keySet()) {
+            System.out.println(key.toString() + ": " + expenses.get(key).toString());
+        }
+
         for (Transaction transaction : expenses.values()) {
             System.out.printf("%s - User: %s %s - Sum: %.2f",
                     transaction.getDate().toString(),
