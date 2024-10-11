@@ -1,21 +1,31 @@
 package BankApp;
 
 import com.google.gson.Gson;
-import org.example.SaveExpenses;
 
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 
 public class ExpenseStorage {
-    //public static List<Expense> expenses = new ArrayList<>();
-    public static HashMap<Expense, Transaction> expenses = new HashMap<>();
+    private static final Gson gson = new Gson();
+    private static final String filePath = "src/main/ExpenseStorage.json";
 
-    public static void addExpense(Expense expense) throws IOException {
-        expenses.put(expense, new Transaction(expense.getAmount(), expense.getDate(), expense.getUser()));
+    private static HashMap<String, Expense> expenses = new HashMap<>();
+
+    public static void loadExpenses() {
         Gson gson = new Gson();
-        String filePath = "src/main/ExpenseStorage.json";
+        try {
+            FileReader fr = new FileReader("src/main/ExpenseStorage.json");
+            expenses.put(gson.fromJson(fr, String.class), gson.fromJson(fr, Expense.class));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void addExpense(String id, Expense expense) throws IOException {
         FileWriter fileWriter = new FileWriter(filePath);
+        expenses.put(id, expense);
         gson.toJson(expenses, fileWriter);
         fileWriter.close();
 
@@ -30,18 +40,20 @@ public class ExpenseStorage {
                 expense.getDate().toString());
     }
 
-    public Expense getExpense(Expense expense) {
+    public static Expense getExpense(Expense expense) {
         return expense;
     }
 
 
     public static void removeExpense(Expense expense) throws IOException {
+        FileWriter fileWriter = new FileWriter(filePath);
         expenses.remove(expense);
-        SaveExpenses.main(null);
+        gson.toJson(expenses, fileWriter);
+        fileWriter.close();
         System.out.printf("Transaction: %s has successfully been removed.", expense.toString());
     }
 
-    public static HashMap<Expense, Transaction> getExpenses() {
+    public static HashMap<String, Expense> getExpenses() {
         return expenses;
     }
 
