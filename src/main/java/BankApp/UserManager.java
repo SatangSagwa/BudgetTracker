@@ -1,40 +1,86 @@
 package BankApp;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class UserManager {
-    private HashMap<StringBuilder, User> users = new HashMap<>();
-    private StringBuilder userID = new StringBuilder("00");
+
+    private Map <Integer, User> users = new HashMap<Integer, User>();
     private int index = 1;
 
-    public HashMap<StringBuilder, User> getUsers() {
+    public void addUser (User user) {
+        users.put(index++, user);
+    }
+
+    public Map<Integer, User> getUsers() {
         return users;
     }
 
     public void printUsers() {
         System.out.println("USERS: ");
-        for (StringBuilder key : users.keySet()) {
-            System.out.println(key.toString() + " " + users.get(key).getFirstName() + " " + users.get(key).getLastName());
+        for (Integer key : users.keySet()) {
+            System.out.println(key.toString() + ": " + users.get(key).getFirstName() + " " + users.get(key).getLastName());
         }
         System.out.println("-----------------------------------------");
     }
 
-    public User getUser(StringBuilder ID) {
-        for (StringBuilder key : users.keySet()) {
+
+    /*
+    private final String filePath = "src/main/UserStorage.json";
+
+    public Map<Integer, User> users;
+    private int index = 1;
+
+    public UserManager() {
+        this.users = new HashMap<>();
+    }
+
+    public void addUser(User user) {
+        this.users.put(index++, user);
+        System.out.println("User added.");
+    }
+
+    public void loadUsers() {
+        Gson gson = new Gson();
+        try {
+            FileReader fr = new FileReader(filePath);
+            users = gson.fromJson(fr, HashMap.class);
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        }
+    }
+
+    public void saveUsers() throws IOException {
+        Gson gson = new Gson();
+        FileWriter fileWriter = new FileWriter(filePath);
+        gson.toJson(users, fileWriter);
+        fileWriter.close();
+        System.out.println("Users have been saved");
+    }
+
+    public Map<Integer, User> getUsers() {
+        return users;
+    }
+
+    public void printUsers() {
+        loadUsers();
+        System.out.println("USERS: ");
+        for (Integer key : users.keySet()) {
+            System.out.println(key.toString() + ": " + users.get(key).toString());
+        }
+        System.out.println("-----------------------------------------");
+    }
+
+    public User getUser(Integer ID) {
+        loadUsers();
+        for (Integer key : users.keySet()) {
             if (ID.toString().equals(key.toString())) {
                 return users.get(key);
             }
         }
         System.out.println("ID: " + ID + " not found");
         return new User("", "");
-    };
-
-
-
-    public void addUser(User user) {
-        StringBuilder id = userID.append(index++);
-        users.put(new StringBuilder(id), user);
-        System.out.println("User with ID: " + id + " has been added to the user list");
-        userID.deleteCharAt(2);
     }
+    */
+
 }
