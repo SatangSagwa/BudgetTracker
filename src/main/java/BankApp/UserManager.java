@@ -10,6 +10,9 @@ public class UserManager {
 
     public void addUser (User user) {
         users.put(index++, user);
+        System.out.printf("%s %s have been added to the user list.",
+                            user.getFirstName(),
+                            user.getLastName());
     }
 
     public Map<Integer, User> getUsers() {
@@ -22,6 +25,18 @@ public class UserManager {
             System.out.println(key.toString() + ": " + users.get(key).getFirstName() + " " + users.get(key).getLastName());
         }
         System.out.println("-----------------------------------------");
+    }
+
+    //Iterate HashMap - users to find int ID
+    public User getUser(Integer ID) {
+        //loadUsers();
+        for (Integer key : users.keySet()) {
+            if (ID.toString().equals(key.toString())) {
+                return users.get(key);
+            }
+        }
+        System.out.println("ID: " + ID + " not found");
+        return new User(null, null);
     }
 
 

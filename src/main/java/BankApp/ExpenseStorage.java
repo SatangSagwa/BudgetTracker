@@ -81,4 +81,12 @@ public class ExpenseStorage {
         }
     }
 
+    public void listCategories() {
+        int i = 1;
+        for (EExpenseCategory category : EExpenseCategory.values()) {
+            System.out.println(i + ": " + category);
+            i++;
+        }
+    }
+
 }

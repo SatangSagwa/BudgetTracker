@@ -34,12 +34,17 @@ public class BudgetTracker {
             User newUser = new User(firstName.toString(), lastName.toString());
             userManager.addUser(newUser);
             userManager.addUser((new User("Test", "TestYson")));
-            userManager.printUsers();
-            //userManager.saveUsers();
         } else {
             //userManager.loadUsers();
             //userManager.printUsers();
         }
+        userManager.printUsers();
+        //userManager.saveUsers();
+        System.out.println("Enter ID to get: ");
+        int id = InputManager.intInput();
+        User getUser = userManager.getUser(id);
+        System.out.println(getUser.getFirstName() + " " + getUser.getLastName());
+
         while (true) {
             System.out.println();
             System.out.println("Please enter your option: ");
@@ -52,7 +57,25 @@ public class BudgetTracker {
             int option = InputManager.intInput(1, 4);
             switch (option) {
                 case 1:
+                    System.out.println("EXPENSES: \n" +
+                                       "----------\n" +
+                            "USER: " + getUser.getFirstName() + " " + getUser.getLastName() + "\n" +
+                            "1. Add expense\n" +
+                            "2. Remove expense\n" +
+                            "3. Edit expense\n" +
+                            "4. Display expense history");
+                    option = InputManager.intInput(1, 4);
+                    switch (option) {
+                        case 1:
+                            System.out.println("ADD EXPENSE: \n" +
+                                               "-------------\n" +
+                                    "USER: " + getUser.getFirstName() + " " + getUser.getLastName());
+                            System.out.println("Enter the total sum: ");
+                            int sum = InputManager.intInput();
+                            expenseStorage.listCategories();
 
+                            //expenseStorage.addExpense(new Expense());
+                    }
             }
         }
     }
