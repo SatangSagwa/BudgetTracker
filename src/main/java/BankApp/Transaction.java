@@ -3,13 +3,13 @@ package BankApp;
 import java.time.LocalDate;
 
 public class Transaction {
-    public static User user;
-    public static double amount;
-    public static LocalDate date;
+    public User user;
+    public double amount;
+    public String date;
 
-    public Transaction(double amount, LocalDate date, User user) {
+    public Transaction(double amount, User user) {
         this.amount = amount;
-        this.date = date;
+        this.date = LocalDate.now().toString();
         this.user = user;
     }
 
@@ -29,11 +29,7 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
     }
 }

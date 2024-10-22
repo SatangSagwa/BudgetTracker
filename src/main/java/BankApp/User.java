@@ -8,7 +8,6 @@ public class User {
     public User(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-        //this.id = id + 1;
     }
 
     public int getId() {

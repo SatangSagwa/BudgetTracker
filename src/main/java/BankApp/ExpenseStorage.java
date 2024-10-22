@@ -1,6 +1,7 @@
 package BankApp;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.FileReader;
@@ -11,28 +12,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ExpenseStorage {
-    private final Gson gson = new Gson();
+    //private final Gson gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(LocalDate.class, new LocalDateAdapter()).create();
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private final String filePath = "src/main/ExpenseStorage.json";
 
-    private Map<String, Transaction> expenses = new HashMap<>();
+    private Map<String, Expense> expenses = new HashMap<>();
     private StringBuilder expenseID = new StringBuilder("00");
     private int index = 1;
 
-    public Map<String, Transaction> getExpenses() {
+    //FIX INDEX! ADD INDEX TO EXPENSE!
+    public Map<String, Expense> getExpenses() {
         return expenses;
     }
 
     public void listExpenses() {
         for (String key : expenses.keySet()) {
-            System.out.println(key.toString() + ": " + expenses.get(key).toString());
-        }
-
-        for (Transaction transaction : expenses.values()) {
-            System.out.printf("%s - User: %s %s - Sum: %.2f",
-                    transaction.getDate().toString(),
-                    transaction.getUser().getFirstName(),
-                    transaction.getUser().getLastName(),
-                    transaction.getAmount());
+            System.out.print(key.toString() + ": ");
+            System.out.printf("%s - User: %s %s - Sum: %.2f\n",
+                    expenses.get(key).getDate(),
+                    expenses.get(key).getUser().getFirstName(),
+                    expenses.get(key).getUser().getLastName(),
+                    expenses.get(key).getAmount());
         }
     }
 
@@ -44,21 +44,23 @@ public class ExpenseStorage {
         }
     }
 
-    public void addExpense(Transaction expense) throws IOException {
+    public void addExpense(Expense expense) throws IOException {
         loadExpenses();
         StringBuilder id = expenseID.append(index++);
-        expenses.put(new StringBuilder(id).toString(), expense);
+        expenses.put(id.toString(), expense);
         expenseID.deleteCharAt(2);
         saveExpenses();
+        /*
         System.out.printf("%s %s have added a new transaction\n" +
                         "Sum: %.2f\n" +
-                        //"Category: %s\n" +
+                        "Category: %s\n" +
                         "Date: %s\n",
-                expense.getUser().getFirstName(),
-                expense.getUser().getLastName(),
-                expense.getAmount(),
-                //expense.getCategory(),
-                expense.getDate().toString());
+                transaction.getUser().getFirstName(),
+                transaction.getUser().getLastName(),
+                transaction.getAmount(),
+                expenses.get(expenseID.toString()).,
+                transaction.getDate().toString()); */
+
     }
 
     public void loadExpenses() {
@@ -66,7 +68,12 @@ public class ExpenseStorage {
         try {
             FileReader fr = new FileReader(filePath);
             expenses = gson.fromJson(fr, type);
+            if (expenses == null) {
+                expenses = new HashMap<>();
+                System.out.println("DEBUG EXPENSE EMPTY");
+            }
             System.out.println("Expenses loaded");
+            //listExpenses();
         } catch (Exception e) {
             System.out.println("Expenses not found!");
         }
@@ -78,6 +85,33 @@ public class ExpenseStorage {
         fw.close();
         System.out.println("Expenses saved");
     }
+
+    /*
+    //https://mkyong.com/java/gson-supports-java-8-date-time-types/
+    public class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
+
+        private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
+
+        @Override
+        public JsonElement serialize(LocalDate localDate,
+                                     Type type,
+                                     JsonSerializationContext jsonSerializationContext) {
+
+            return new JsonPrimitive(localDate.format(formatter)); // "yyyy-MM-dd"
+
+        }
+
+        @Override
+        public LocalDate deserialize(JsonElement jsonElement,
+                                     Type type,
+                                     JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+
+            return LocalDate.parse(jsonElement.getAsJsonPrimitive().getAsString(), formatter);
+        }
+
+    }
+
+     */
 
     /*
     private final Gson gson = new Gson();

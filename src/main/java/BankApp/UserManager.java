@@ -1,6 +1,7 @@
 package BankApp;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.FileReader;
@@ -11,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserManager {
-    private final Gson gson = new Gson();
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     private Map<String, User> users = new HashMap<>();
     private Integer index = 0; //ska flytta till user!!!

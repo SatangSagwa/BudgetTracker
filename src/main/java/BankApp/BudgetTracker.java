@@ -1,7 +1,6 @@
 package BankApp;
 
 import java.io.IOException;
-import java.time.LocalDate;
 
 public class BudgetTracker {
 
@@ -12,7 +11,7 @@ public class BudgetTracker {
         System.out.println("Welcome to the budget tracker!\n" +
                            "------------------------------");
         userManager.loadUsers();
-        User user = new User(null, null);
+        User user;
 
         if (userManager.getUsers().isEmpty()) {
             userManager.addUser(new User("Test", "Testson"));
@@ -59,9 +58,18 @@ public class BudgetTracker {
                             System.out.println("Enter expense category: ");
                             expenseStorage.listCategories();
                             int category = InputManager.intInput(1, EExpenseCategory.values().length);
-                            expenseStorage.addExpense(new Expense(sum, LocalDate.now(), user, EExpenseCategory.values()[category-1]));
-                            //expenseStorage.listExpenses();
+                            //LocalDate date = LocalDate.now();
+                            expenseStorage.addExpense(new Expense(sum, user, EExpenseCategory.values()[category-1]));
+                            expenseStorage.listExpenses();
                     }
+                case 2:
+
+                case 3:
+
+                case 4:
+
+                case -1:
+                    //System.exit(0);
             }
         }
     }

@@ -1,11 +1,9 @@
 package BankApp;
 
-import java.time.LocalDate;
-
 public class Income extends Transaction {
     private EIncomeCategory category;
-    public Income(double amount, LocalDate date, User user, EIncomeCategory category) {
-        super(amount, date, user);
+    public Income(double amount, String date, User user, EIncomeCategory category) {
+        super(amount, user);
         this.category = category;
     }
 

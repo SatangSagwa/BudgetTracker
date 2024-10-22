@@ -1,1 +1,12 @@
-{"1":{"firstName":"Test","lastName":"Testson","id":1},"2":{"firstName":"Em","lastName":"Iv","id":2}}
+{
+  "1": {
+    "firstName": "Test",
+    "lastName": "Testson",
+    "id": 1
+  },
+  "2": {
+    "firstName": "Em",
+    "lastName": "Iv",
+    "id": 2
+  }
+}
