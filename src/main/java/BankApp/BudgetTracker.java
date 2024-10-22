@@ -1,49 +1,32 @@
 package BankApp;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class BudgetTracker {
 
     public static void main(String[] args) throws IOException {
         UserManager userManager = new UserManager();
-        //Gson gson = new Gson();
-        //userManager.loadUsers();
         ExpenseStorage expenseStorage = new ExpenseStorage();
-
-        //userManager.addUser(new User("Emilia", "I"));
-        //userManager.addUser(new User("Em", "II"));
-        //userManager.printUsers();
-
-        //ONLY FOR TESTING!
-        //User testUser = userManager.getUser(new StringBuilder("002"));
-        //System.out.println(testUser.getFirstName());
-        //ONLY FOR TESTING!
-
 
         System.out.println("Welcome to the budget tracker!\n" +
                            "------------------------------");
-
+        userManager.loadUsers();
+        User user = new User(null, null);
 
         if (userManager.getUsers().isEmpty()) {
+            userManager.addUser(new User("Test", "Testson"));
             System.out.println("There are no users!");
             System.out.println("Please add a new user");
             System.out.print("First Name: ");
             String firstName = InputManager.stringInput();
             System.out.print("\nLast Name: ");
             String lastName = InputManager.stringInput();
-            User newUser = new User(firstName.toString(), lastName.toString());
-            userManager.addUser(newUser);
-            userManager.addUser((new User("Test", "TestYson")));
+            user = new User(firstName, lastName);
+            userManager.addUser(user);
         } else {
-            //userManager.loadUsers();
-            //userManager.printUsers();
+            user = userManager.getUser();
         }
-        userManager.printUsers();
-        //userManager.saveUsers();
-        System.out.println("Enter ID to get: ");
-        int id = InputManager.intInput();
-        User getUser = userManager.getUser(id);
-        System.out.println(getUser.getFirstName() + " " + getUser.getLastName());
 
         while (true) {
             System.out.println();
@@ -59,22 +42,25 @@ public class BudgetTracker {
                 case 1:
                     System.out.println("EXPENSES: \n" +
                                        "----------\n" +
-                            "USER: " + getUser.getFirstName() + " " + getUser.getLastName() + "\n" +
+                            "USER: " + user.getFirstName() + " " + user.getLastName() + "\n" +
                             "1. Add expense\n" +
                             "2. Remove expense\n" +
                             "3. Edit expense\n" +
-                            "4. Display expense history");
+                            "4. Display expense history\n" +
+                            "5. Change user");
                     option = InputManager.intInput(1, 4);
                     switch (option) {
                         case 1:
                             System.out.println("ADD EXPENSE: \n" +
                                                "-------------\n" +
-                                    "USER: " + getUser.getFirstName() + " " + getUser.getLastName());
+                                    "USER: " + user.getFirstName() + " " + user.getLastName());
                             System.out.println("Enter the total sum: ");
                             int sum = InputManager.intInput();
+                            System.out.println("Enter expense category: ");
                             expenseStorage.listCategories();
-
-                            //expenseStorage.addExpense(new Expense());
+                            int category = InputManager.intInput(1, EExpenseCategory.values().length);
+                            expenseStorage.addExpense(new Expense(sum, LocalDate.now(), user, EExpenseCategory.values()[category-1]));
+                            //expenseStorage.listExpenses();
                     }
             }
         }
