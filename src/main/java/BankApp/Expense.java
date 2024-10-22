@@ -33,7 +33,6 @@ public class Expense extends Transaction {
                 " id = " + id +
                 ", amount=" + amount +
                 ", user = " + user.getFirstName() + user.getLastName() +
-                ", category = " + category +
-                '}';
+                ", category = " + category;
     }
 }

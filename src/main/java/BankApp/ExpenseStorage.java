@@ -71,14 +71,29 @@ public class ExpenseStorage {
 
     }
 
+
     public void removeExpense(Integer id) {
         loadExpenses();
         try {
-            expenses.remove(id);
+            expenses.remove(id.toString());
+            System.out.println("Expense " + id + " has been removed.");
             saveExpenses();
         } catch (Exception e) {
-            System.out.println("ID not found");
+            System.out.println("DEBUGID not found!");
         }
+    }
+
+
+    public Expense getExpenseByDate(int year, int month, int ID) {
+        List<Expense> matches = findExpensesByDate(year, month);
+        for (Expense expense : matches) {
+            if (expense.getId() == ID) {
+                return expense;
+            } else {
+                System.out.println("Expense not found.");
+            }
+        }
+        return null;
     }
 
     public List<Expense> findExpensesByDate(int year, int month) {
