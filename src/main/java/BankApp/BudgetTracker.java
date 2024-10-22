@@ -1,6 +1,7 @@
 package BankApp;
 
 import java.io.IOException;
+import java.util.List;
 
 public class BudgetTracker {
 
@@ -58,9 +59,25 @@ public class BudgetTracker {
                             System.out.println("Enter expense category: ");
                             expenseStorage.listCategories();
                             int category = InputManager.intInput(1, EExpenseCategory.values().length);
-                            //LocalDate date = LocalDate.now();
                             expenseStorage.addExpense(new Expense(sum, user, EExpenseCategory.values()[category-1]));
                             expenseStorage.listExpenses();
+
+                        case 2:
+                            System.out.println("REMOVE EXPENSE: \n" +
+                                    "-------------\n");
+                            System.out.println("Enter year of transaction to remove: ");
+                            int year = InputManager.intInput();
+                            System.out.println("Enter the month of transaction to remove: ");
+                            int month = InputManager.intInput();
+                            List<Expense> matches = expenseStorage.findExpensesByDate(year, month);
+                            if (matches.isEmpty()) {
+                                System.out.println("No matches");
+                            } else {
+                                for (Expense expense : matches) {
+                                    System.out.println(expense.toString());
+                                    System.out.println("-------------------------");
+                                }
+                            }
                     }
                 case 2:
 

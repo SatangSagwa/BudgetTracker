@@ -15,10 +15,15 @@ public class UserManager {
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     private Map<String, User> users = new HashMap<>();
-    private Integer index = 0; //ska flytta till user!!!
+    private Integer index = 0;
 
     public void addUser (User user) throws IOException {
         loadUsers();
+        for (String key : users.keySet()) {
+            if (index <= users.get(key).getId()) {
+                index = users.get(key).getId();
+            }
+        }
         index++;
         user.setId(index);
         String str = index.toString();

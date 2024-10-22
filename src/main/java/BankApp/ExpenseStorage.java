@@ -8,7 +8,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ExpenseStorage {
@@ -17,8 +19,7 @@ public class ExpenseStorage {
     private final String filePath = "src/main/ExpenseStorage.json";
 
     private Map<String, Expense> expenses = new HashMap<>();
-    private StringBuilder expenseID = new StringBuilder("00");
-    private int index = 1;
+    private Integer index = 0;
 
     //FIX INDEX! ADD INDEX TO EXPENSE!
     public Map<String, Expense> getExpenses() {
@@ -27,7 +28,7 @@ public class ExpenseStorage {
 
     public void listExpenses() {
         for (String key : expenses.keySet()) {
-            System.out.print(key.toString() + ": ");
+            System.out.print(key + ": ");
             System.out.printf("%s - User: %s %s - Sum: %.2f\n",
                     expenses.get(key).getDate(),
                     expenses.get(key).getUser().getFirstName(),
@@ -46,9 +47,16 @@ public class ExpenseStorage {
 
     public void addExpense(Expense expense) throws IOException {
         loadExpenses();
-        StringBuilder id = expenseID.append(index++);
-        expenses.put(id.toString(), expense);
-        expenseID.deleteCharAt(2);
+        //Increase index to highest id in expenses map
+        for (String key : expenses.keySet()) {
+            if (index <= expenses.get(key).getId()) {
+                index = expenses.get(key).getId();
+            }
+        }
+        index++;
+        expense.setId(index);
+        String str = index.toString();
+        expenses.put(str, expense);
         saveExpenses();
         /*
         System.out.printf("%s %s have added a new transaction\n" +
@@ -61,6 +69,31 @@ public class ExpenseStorage {
                 expenses.get(expenseID.toString()).,
                 transaction.getDate().toString()); */
 
+    }
+
+    public void removeExpense(Integer id) {
+        loadExpenses();
+        try {
+            expenses.remove(id);
+            saveExpenses();
+        } catch (Exception e) {
+            System.out.println("ID not found");
+        }
+    }
+
+    public List<Expense> findExpensesByDate(int year, int month) {
+        loadExpenses();
+        String searchDateStr = year + "-" + month;
+        List<Expense> searchMatches = new ArrayList<>();
+        for (String key : expenses.keySet()) {
+            String compareDate = expenses.get(key).getDate();
+            String compareDateStr = compareDate.substring(0, 7);
+            System.out.println(compareDateStr);
+            if (compareDateStr.equals(searchDateStr)) {
+                searchMatches.add(expenses.get(key));
+            }
+        }
+        return searchMatches;
     }
 
     public void loadExpenses() {

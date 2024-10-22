@@ -9,8 +9,8 @@ public class Transaction {
 
     public Transaction(double amount, User user) {
         this.amount = amount;
-        this.date = LocalDate.now().toString();
         this.user = user;
+        this.date = LocalDate.now().toString();
     }
 
     public User getUser() {
