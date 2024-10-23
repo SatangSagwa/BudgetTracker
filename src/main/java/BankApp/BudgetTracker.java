@@ -28,7 +28,7 @@ public class BudgetTracker {
                             //True if match is found for specified ID
                             boolean hasMatch = false;
                             System.out.println("REMOVE EXPENSE: \n" +
-                                    "-------------\n");
+                                                "--------------\n");
                             System.out.println("Enter year of transaction to remove: ");
                             int yearToRemove = InputManager.intInput();
                             System.out.println("Enter the month of transaction to remove: ");
@@ -230,6 +230,11 @@ public class BudgetTracker {
             }
         }
     }
+    /*
+    Prints welcome message
+    Loads json for users, incomes and expenses
+    If there are no existing users, the user is prompted to add a new user.
+     */
     private static void startMenu() throws IOException {
         System.out.println("Welcome to the budget tracker!\n" +
                 "------------------------------");
@@ -245,6 +250,8 @@ public class BudgetTracker {
             user = new User(firstName, lastName);
             userManager.addUser(user);
         } else {
+            //Choose existing user OR make new user?
+            System.out.println("Choose an existing user");
             user = userManager.getUser();
         }
     }

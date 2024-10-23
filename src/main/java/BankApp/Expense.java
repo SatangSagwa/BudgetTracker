@@ -4,7 +4,6 @@ import java.time.LocalDate;
 
 public class Expense extends Transaction {
     private EExpenseCategory category;
-    private int id = 0;
 
     public Expense(double amount, User user, LocalDate date, EExpenseCategory category) {
         super(amount, user, date);
@@ -12,14 +11,6 @@ public class Expense extends Transaction {
         this.user = user;
         this.date = date.toString();
         this.category = category;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public EExpenseCategory getCategory() {
