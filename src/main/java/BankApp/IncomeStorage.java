@@ -95,7 +95,7 @@ public class IncomeStorage {
             incomes = gson.fromJson(fr, type);
             if (incomes == null) {
                 incomes = new HashMap<>();
-                System.out.println("DEBUG INCOMES EMPTY");
+                //System.out.println("DEBUG INCOMES EMPTY");
             }
             System.out.println("Incomes loaded");
             //listExpenses();

@@ -1,57 +1,57 @@
 {
   "2": {
     "category": "ENTERTAINMENT",
-    "id": 2,
     "user": {
       "firstName": "Em",
       "lastName": "Iv",
       "id": 2
     },
     "amount": 90.0,
-    "date": "2024-10-22"
+    "date": "2024-10-22",
+    "id": 2
   },
   "4": {
     "category": "SHOPPING",
-    "id": 4,
     "user": {
       "firstName": "Em",
       "lastName": "Iv",
       "id": 2
     },
-    "amount": 400.0,
-    "date": "2024-10-22"
+    "amount": 499.0,
+    "date": "2024-10-22",
+    "id": 4
   },
   "5": {
     "category": "OTHER",
-    "id": 5,
     "user": {
       "firstName": "Em",
       "lastName": "Iv",
       "id": 2
     },
     "amount": 370.0,
-    "date": "2024-10-22"
+    "date": "2024-10-22",
+    "id": 5
   },
   "6": {
     "category": "OTHER",
-    "id": 6,
     "user": {
       "firstName": "Em",
       "lastName": "Iv",
       "id": 2
     },
     "amount": 300.0,
-    "date": "2024-10-22"
+    "date": "2024-10-22",
+    "id": 6
   },
   "7": {
     "category": "ENTERTAINMENT",
-    "id": 7,
     "user": {
       "firstName": "Em",
       "lastName": "Iv",
       "id": 2
     },
     "amount": 399.0,
-    "date": "2023-06-20"
+    "date": "2023-06-20",
+    "id": 7
   }
 }
