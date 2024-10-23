@@ -17,13 +17,16 @@ public class BudgetTracker {
         while (true) {
             int option = optionsMenu();
             switch (option) {
+                //Expenses
                 case 1:
-                    //Expenses
+                    //Print expense options, get option input
                     option = expensesOption();
                     switch (option) {
+                        //Add a new expense
                         case 1:
                             addTransaction("expense");
                             break;
+                        //Remove an expense
                         case 2:
                             //True if match is found for specified ID
                             boolean hasMatch = false;

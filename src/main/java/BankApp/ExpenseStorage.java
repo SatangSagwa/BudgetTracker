@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ExpenseStorage {
-    //private final Gson gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(LocalDate.class, new LocalDateAdapter()).create();
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private final String filePath = "src/main/ExpenseStorage.json";
 
@@ -58,17 +57,6 @@ public class ExpenseStorage {
         String str = index.toString();
         expenses.put(str, expense);
         saveExpenses();
-        /*
-        System.out.printf("%s %s have added a new transaction\n" +
-                        "Sum: %.2f\n" +
-                        "Category: %s\n" +
-                        "Date: %s\n",
-                transaction.getUser().getFirstName(),
-                transaction.getUser().getLastName(),
-                transaction.getAmount(),
-                expenses.get(expenseID.toString()).,
-                transaction.getDate().toString()); */
-
     }
 
 
@@ -79,7 +67,7 @@ public class ExpenseStorage {
             System.out.println("Expense " + id + " has been removed.");
             saveExpenses();
         } catch (Exception e) {
-            System.out.println("DEBUGID not found!");
+            System.out.println("ID not found!");
         }
     }
 
@@ -124,117 +112,4 @@ public class ExpenseStorage {
         fw.close();
         System.out.println("Expenses saved");
     }
-
-    /*
-    //https://mkyong.com/java/gson-supports-java-8-date-time-types/
-    public class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
-
-        private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
-
-        @Override
-        public JsonElement serialize(LocalDate localDate,
-                                     Type type,
-                                     JsonSerializationContext jsonSerializationContext) {
-
-            return new JsonPrimitive(localDate.format(formatter)); // "yyyy-MM-dd"
-
-        }
-
-        @Override
-        public LocalDate deserialize(JsonElement jsonElement,
-                                     Type type,
-                                     JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-
-            return LocalDate.parse(jsonElement.getAsJsonPrimitive().getAsString(), formatter);
-        }
-
-    }
-
-     */
-
-    /*
-    private final Gson gson = new Gson();
-    private final String filePath = "src/main/ExpenseStorage.json";
-
-    private HashMap<String, Expense> expenses = new HashMap<>();
-    private StringBuilder expenseID = new StringBuilder("00");
-    private int index = 1;
-
-    public void loadExpenses() {
-        Type type = new TypeToken<Map<String, Expense>>() {}.getType();
-        try {
-            FileReader fr = new FileReader(filePath);
-            expenses = gson.fromJson(fr, type);
-            System.out.println("Expenses loaded");
-        } catch (Exception e) {
-            System.out.println("Expenses not found!");
-        }
-    }
-
-    public void addExpense(Expense expense) throws IOException {
-        loadExpenses();
-        FileWriter fileWriter = new FileWriter(filePath);
-        StringBuilder id = expenseID.append(index++);
-        expenses.put(new StringBuilder(id).toString(), expense);
-        gson.toJson(expenses, fileWriter);
-        fileWriter.close();
-        expenseID.deleteCharAt(2);
-        System.out.println("Expenses have been saved.");
-
-        System.out.printf("%s %s have added a new transaction\n" +
-                "Sum: %.2f\n" +
-                "Category: %s\n" +
-                "Date: %s\n",
-                expense.getUser().getFirstName(),
-                expense.getUser().getLastName(),
-                expense.getAmount(),
-                expense.getCategory(),
-                expense.getDate().toString());
-    }
-
-    public Expense getExpense(StringBuilder ID) {
-        for (String key : expenses.keySet()) {
-            if (ID.toString().equals(key.toString())) {
-                return expenses.get(key);
-            }
-        }
-        System.out.println("ID: " + ID + " not found!");
-        return null;
-    }
-
-
-    public void removeExpense(Expense expense) throws IOException {
-        FileWriter fileWriter = new FileWriter(filePath);
-        expenses.remove(expense);
-        gson.toJson(expenses, fileWriter);
-        fileWriter.close();
-        System.out.printf("Transaction: %s has successfully been removed.", expense.toString());
-    }
-
-    public HashMap<String, Expense> getExpenses() {
-        return expenses;
-    }
-
-    public void listExpenses() {
-        for (String key : expenses.keySet()) {
-            System.out.println(key.toString() + ": " + expenses.get(key).toString());
-        }
-
-        for (Transaction transaction : expenses.values()) {
-            System.out.printf("%s - User: %s %s - Sum: %.2f",
-                    transaction.getDate().toString(),
-                    transaction.getUser().getFirstName(),
-                    transaction.getUser().getLastName(),
-                    transaction.getAmount());
-        }
-    }
-
-    public void listCategories() {
-        int i = 1;
-        for (EExpenseCategory category : EExpenseCategory.values()) {
-            System.out.println(i + ": " + category);
-            i++;
-        }
-    }
-*/
 }
