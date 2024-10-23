@@ -3,6 +3,7 @@ package BankApp;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public class BudgetTracker {
     private static final UserManager userManager = new UserManager();
@@ -69,6 +70,23 @@ public class BudgetTracker {
                 //Display history
                 case 3:
                     option = optionMenu("history");
+                    switch (option) {
+                        //View all
+                        case 1:
+                            viewAllTransactionHistory();
+                        //By date
+                        case 2:
+                            viewTransactionHistoryByDate();
+                        //By user
+                        case 3:
+                            viewTransactionHistoryByUser();
+                        //By category
+                        case 4:
+                            viewTransactionHistoryByCategory();
+                    }
+
+                //Edit users
+                case 4:
             }
         }
     }
@@ -436,5 +454,43 @@ public class BudgetTracker {
 
     private static void changeUser() {
         user = userManager.getUser();
+    }
+
+    private static void viewAllTransactionHistory() {
+        expenseStorage.loadExpenses();
+        incomeStorage.loadIncomes();
+        Map<String, Expense> expenses = expenseStorage.getExpenses();
+        Map<String, Income> incomes = incomeStorage.getIncomes();
+
+        System.out.println("1. View all transactions\n" +
+                "2. View all expenses\n" +
+                "3. View all incomes");
+
+        int option = InputManager.intInput(1, 3);
+        switch (option) {
+            case 1:
+                System.out.println("All transactions: ");
+                if (expenses.isEmpty() && incomes.isEmpty()) {
+                    System.out.println("There is no transaction history");
+                } else {
+                    System.out.println("Expenses:");
+                    expenseStorage.listExpenses();
+                    System.out.println("--------------------------------------------");
+                    System.out.println("Incomes:");
+                    incomeStorage.listIncomes();
+
+                }
+                break;
+
+            case 2:
+                System.out.println("All expenses: ");
+                expenseStorage.listExpenses();
+                break;
+
+            case 3:
+                System.out.println("All incomes: ");
+                incomeStorage.listIncomes();
+                break;
+        }
     }
 }

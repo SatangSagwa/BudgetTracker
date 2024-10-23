@@ -25,6 +25,8 @@ public class ExpenseStorage {
         return expenses;
     }
 
+
+
     public void listExpenses() {
         for (String key : expenses.keySet()) {
             System.out.print(key + ": ");

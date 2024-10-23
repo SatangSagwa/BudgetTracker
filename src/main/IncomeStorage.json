@@ -1,0 +1,13 @@
+{
+  "1": {
+    "category": "SALES",
+    "user": {
+      "firstName": "Em",
+      "lastName": "Iv",
+      "id": 2
+    },
+    "amount": 500.0,
+    "date": "2024-10-22",
+    "id": 1
+  }
+}
