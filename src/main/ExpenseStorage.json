@@ -42,5 +42,16 @@
     },
     "amount": 300.0,
     "date": "2024-10-22"
+  },
+  "7": {
+    "category": "ENTERTAINMENT",
+    "id": 7,
+    "user": {
+      "firstName": "Em",
+      "lastName": "Iv",
+      "id": 2
+    },
+    "amount": 399.0,
+    "date": "2023-06-20"
   }
 }

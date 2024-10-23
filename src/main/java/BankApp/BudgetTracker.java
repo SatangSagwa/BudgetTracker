@@ -1,87 +1,52 @@
 package BankApp;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BudgetTracker {
+    private static final UserManager userManager = new UserManager();
+    private static final ExpenseStorage expenseStorage = new ExpenseStorage();
+    private static final IncomeStorage incomeStorage = new IncomeStorage();
+    private static User user;
+
 
     public static void main(String[] args) throws IOException {
-        UserManager userManager = new UserManager();
-        ExpenseStorage expenseStorage = new ExpenseStorage();
-
-        System.out.println("Welcome to the budget tracker!\n" +
-                           "------------------------------");
-        userManager.loadUsers();
-        User user;
-
-        if (userManager.getUsers().isEmpty()) {
-            userManager.addUser(new User("Test", "Testson"));
-            System.out.println("There are no users!");
-            System.out.println("Please add a new user");
-            System.out.print("First Name: ");
-            String firstName = InputManager.stringInput();
-            System.out.print("\nLast Name: ");
-            String lastName = InputManager.stringInput();
-            user = new User(firstName, lastName);
-            userManager.addUser(user);
-        } else {
-            user = userManager.getUser();
-        }
-
+        startMenu();
         while (true) {
-            System.out.println();
-            System.out.println("Please enter your option: ");
-            System.out.println("1. Edit expenses");
-            System.out.println("2. Edit incomes");
-            System.out.println("3. Display history");
-            System.out.println("4. Edit users");
-            System.out.println("Q. Quit");
-
-            int option = InputManager.intInput(1, 4);
+            int option = optionsMenu();
             switch (option) {
                 case 1:
-                    System.out.println("EXPENSES: \n" +
-                            "----------\n" +
-                            "USER: " + user.getFirstName() + " " + user.getLastName() + "\n" +
-                            "1. Add expense\n" +
-                            "2. Remove expense\n" +
-                            "3. Edit expense\n" +
-                            "4. Display expense history\n" +
-                            "5. Change user");
-                    option = InputManager.intInput(1, 4);
-
+                    //Expenses
+                    option = expensesOption();
                     switch (option) {
                         case 1:
-                            System.out.println("ADD EXPENSE: \n" +
-                                    "-------------\n" +
-                                    "USER: " + user.getFirstName() + " " + user.getLastName());
-                            System.out.println("Enter the total sum: ");
-                            int sum = InputManager.intInput();
-                            System.out.println("Enter expense category: ");
-                            expenseStorage.listCategories();
-                            int category = InputManager.intInput(1, EExpenseCategory.values().length);
-                            expenseStorage.addExpense(new Expense(sum, user, EExpenseCategory.values()[category - 1]));
-                            System.out.println("Expense successfully added!");
-                            //expenseStorage.listExpenses();
+                            addTransaction("expense");
                             break;
-
                         case 2:
+                            //True if match is found for specified ID
                             boolean hasMatch = false;
                             System.out.println("REMOVE EXPENSE: \n" +
                                     "-------------\n");
                             System.out.println("Enter year of transaction to remove: ");
-                            int year = InputManager.intInput();
+                            int yearToRemove = InputManager.intInput();
                             System.out.println("Enter the month of transaction to remove: ");
-                            int month = InputManager.intInput();
-                            List<Expense> matches = expenseStorage.findExpensesByDate(year, month);
+                            int monthToRemove = InputManager.intInput();
+
+                            //Compare the date to all expenses, add matches to list
+                            List<Expense> matches = expenseStorage.findExpensesByDate(yearToRemove, monthToRemove);
+                            //If there are no matches for the specified year/month
                             if (matches.isEmpty()) {
                                 System.out.println("No matches");
+                                //If there are matches:
                             } else {
+                                //Print all matching expenses
                                 for (Expense expense : matches) {
                                     System.out.println(expense.toString());
                                     System.out.println("-------------------------");
                                 }
+                                //Input for ID to remove
                                 System.out.println("Enter ID to remove: ");
                                 int id = InputManager.intInput();
                                 for (Expense expense : matches) {
@@ -99,7 +64,7 @@ public class BudgetTracker {
                             break;
                         case 3:
                             System.out.println("EDIT EXPENSE: \n" +
-                                                "-------------\n");
+                                    "-------------\n");
                             boolean editHasMatch = false;
                             System.out.println("Enter year of transaction to edit: ");
                             int yearToEdit = InputManager.intInput();
@@ -130,6 +95,7 @@ public class BudgetTracker {
                                         int editOption = InputManager.intInput(1, 3);
                                         switch (editOption) {
                                             case 1:
+                                                //Edit amount for an expense
                                                 System.out.println("Current amount: " + expense.getAmount());
                                                 System.out.println("Enter new amount: ");
                                                 int newAmount = InputManager.intInput();
@@ -137,6 +103,7 @@ public class BudgetTracker {
                                                 expenseStorage.saveExpenses();
                                                 break;
 
+                                            //Edit category
                                             case 2:
                                                 System.out.println("Current category: " + expense.getCategory());
                                                 System.out.println("Enter new category: ");
@@ -147,6 +114,7 @@ public class BudgetTracker {
                                                 expenseStorage.saveExpenses();
                                                 continue;
 
+                                                //Edit user
                                             case 3:
                                                 System.out.println("Current user: " + expense.getUser().getFirstName() + " " + expense.getUser().getLastName());
                                                 User newUser = userManager.getUser();
@@ -154,11 +122,13 @@ public class BudgetTracker {
                                                 System.out.println("New user set to " + expense.getUser().getFirstName() + " " + expense.getUser().getLastName());
                                                 expenseStorage.saveExpenses();
                                         }
-                                    } else {
-                                        System.out.println("ID not found!");
                                     }
                                 }
-                            } break;
+                            }
+                            if (!editHasMatch) {
+                                System.out.println("No matches for specified date.");
+                                break;
+                            }
                         case 4:
                             System.out.println("EXPENSE HISTORY: \n" +
                                     "-------------\n");
@@ -193,7 +163,7 @@ public class BudgetTracker {
                                     List<Expense> userMatches = new ArrayList<Expense>();
 
                                     for (String key : expenseStorage.getExpenses().keySet()) {
-                                        if(expenseStorage.getExpenses().get(key).getUser() == newUser) {
+                                        if (expenseStorage.getExpenses().get(key).getUser() == newUser) {
                                             userMatches.add(expenseStorage.getExpenses().get(key));
                                         }
                                     }
@@ -210,14 +180,142 @@ public class BudgetTracker {
 
                     }
                 case 2:
+                    System.out.println("INCOMES: \n" +
+                            "----------\n" +
+                            "USER: " + user.getFirstName() + " " + user.getLastName() + "\n" +
+                            "1. Add income\n" +
+                            "2. Remove income\n" +
+                            "3. Edit income\n" +
+                            "4. Change user");
 
-                case 3:
+                    option = InputManager.intInput(1, 4);
 
-                case 4:
+                    switch (option) {
+                        case 1:
+                            System.out.println("ADD INCOME: \n" +
+                                    "-------------\n" +
+                                    "USER: " + user.getFirstName() + " " + user.getLastName());
+                            //Input
+                            System.out.println("Enter the total sum: ");
+                            int sum = InputManager.intInput();
+                            System.out.println("Enter category: ");
+                            expenseStorage.listCategories();
+                            int category = InputManager.intInput(1, EExpenseCategory.values().length);
+                            System.out.println("Enter year of transaction: ");
+                            int year = InputManager.intInput(2000, 2030);
+                            System.out.println("Enter month of transaction: ");
+                            int month = InputManager.intInput(1, 12);
+                            System.out.println("Enter day of transaction: ");
+                            int day = InputManager.intInput(1, 31);
+                            try {
+                                LocalDate date = LocalDate.of(year, month, day);
+                                //Adding expense to map
+                                Expense expense = new Expense(sum, user, date, EExpenseCategory.values()[category - 1]);
+                                expenseStorage.addExpense(expense);
+                                System.out.println("Expense successfully added!");
+                                break;
 
-                case -1:
-                    //System.exit(0);
+                            } catch (Exception e) {
+                                System.out.println("Invalid date!");
+                            }
+                            break;
+
+                        case 3:
+
+                        case 4:
+
+                        case -1:
+                            //System.exit(0);
+                    }
             }
+        }
+    }
+    private static void startMenu() throws IOException {
+        System.out.println("Welcome to the budget tracker!\n" +
+                "------------------------------");
+        userManager.loadUsers();
+        if (userManager.getUsers().isEmpty()) {
+            userManager.addUser(new User("Test", "Testson"));
+            System.out.println("There are no users!");
+            System.out.println("Please add a new user");
+            System.out.print("First Name: ");
+            String firstName = InputManager.stringInput();
+            System.out.print("\nLast Name: ");
+            String lastName = InputManager.stringInput();
+            user = new User(firstName, lastName);
+            userManager.addUser(user);
+        } else {
+            user = userManager.getUser();
+        }
+    }
+
+    private static int optionsMenu() {
+        System.out.println();
+        System.out.println("Please enter your option: ");
+        System.out.println("1. Edit expenses");
+        System.out.println("2. Edit incomes");
+        System.out.println("3. Display history");
+        System.out.println("4. Edit users");
+        System.out.println("Q. Quit");
+        return InputManager.intInput(1, 4);
+    }
+
+    private static int expensesOption() {
+        System.out.println("EXPENSES: \n" +
+                "----------\n" +
+                "USER: " + user.getFirstName() + " " + user.getLastName() + "\n" +
+                "1. Add expense\n" +
+                "2. Remove expense\n" +
+                "3. Edit expense\n" +
+                "4. Change user");
+        return InputManager.intInput(1, 4);
+    }
+
+    private static void addTransaction(String type) {
+        if (type.equals("expense")) {
+            System.out.println("ADD EXPENSE: \n" +
+                    "-------------\n" +
+                    "USER: " + user.getFirstName() + " " + user.getLastName());
+
+        } else if (type.equals("income")) {
+            System.out.println("ADD INCOME: \n" +
+                    "-------------\n" +
+                    "USER: " + user.getFirstName() + " " + user.getLastName());
+        }
+        //Input
+        System.out.println("Enter the total sum: ");
+        int sum = InputManager.intInput();
+        System.out.println("Enter category: ");
+
+        int category = 0;
+
+        if (type.equals("expense")) {
+            expenseStorage.listCategories();
+            category = InputManager.intInput(1, EExpenseCategory.values().length);
+        } else if (type.equals("income")) {
+            incomeStorage.listCategories();
+            category = InputManager.intInput(1, EIncomeCategory.values().length);
+        }
+        System.out.println("Enter year of transaction: ");
+        int year = InputManager.intInput(2000, 2030);
+        System.out.println("Enter month of transaction: ");
+        int month = InputManager.intInput(1, 12);
+        System.out.println("Enter day of transaction: ");
+        int day = InputManager.intInput(1, 31);
+        try {
+            LocalDate date = LocalDate.of(year, month, day);
+            //Adding expense to map
+            if (type.equals("expense")) {
+                Expense expense = new Expense(sum, user, date, EExpenseCategory.values()[category - 1]);
+                expenseStorage.addExpense(expense);
+                System.out.println("Expense successfully added!");
+            } else if (type.equals("income")) {
+                Income income = new Income(sum, user, date, EIncomeCategory.values()[category - 1]);
+                incomeStorage.addIncome(income);
+                System.out.println("Income successfully added!");
+            }
+        } catch (Exception e) {
+            System.out.println("Invalid date!");
         }
     }
 }

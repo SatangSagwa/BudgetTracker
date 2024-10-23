@@ -1,13 +1,16 @@
 package BankApp;
 
+import java.time.LocalDate;
+
 public class Expense extends Transaction {
     private EExpenseCategory category;
     private int id = 0;
 
-    public Expense(double amount, User user, EExpenseCategory category) {
-        super(amount, user);
+    public Expense(double amount, User user, LocalDate date, EExpenseCategory category) {
+        super(amount, user, date);
         this.amount = amount;
         this.user = user;
+        this.date = date.toString();
         this.category = category;
     }
 

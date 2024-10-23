@@ -83,28 +83,19 @@ public class ExpenseStorage {
         }
     }
 
-
-    public Expense getExpenseByDate(int year, int month, int ID) {
-        List<Expense> matches = findExpensesByDate(year, month);
-        for (Expense expense : matches) {
-            if (expense.getId() == ID) {
-                return expense;
-            } else {
-                System.out.println("Expense not found.");
-            }
-        }
-        return null;
-    }
-
     public List<Expense> findExpensesByDate(int year, int month) {
         loadExpenses();
-        String searchDateStr = year + "-" + month;
+        String searchDateString = year + "-" + month;
+        if (month < 10) {
+            searchDateString = year + "-0" + month;
+        }
+        System.out.println(searchDateString);
         List<Expense> searchMatches = new ArrayList<>();
         for (String key : expenses.keySet()) {
             String compareDate = expenses.get(key).getDate();
             String compareDateStr = compareDate.substring(0, 7);
             System.out.println(compareDateStr);
-            if (compareDateStr.equals(searchDateStr)) {
+            if (compareDateStr.equals(searchDateString)) {
                 searchMatches.add(expenses.get(key));
             }
         }
