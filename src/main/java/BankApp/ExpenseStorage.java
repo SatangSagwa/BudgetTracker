@@ -25,19 +25,6 @@ public class ExpenseStorage {
         return expenses;
     }
 
-
-
-    public void listExpenses() {
-        for (String key : expenses.keySet()) {
-            System.out.print(key + ": ");
-            System.out.printf("%s - User: %s %s - Sum: %.2f\n",
-                    expenses.get(key).getDate(),
-                    expenses.get(key).getUser().getFirstName(),
-                    expenses.get(key).getUser().getLastName(),
-                    expenses.get(key).getAmount());
-        }
-    }
-
     public void listCategories() {
         int i = 1;
         for (EExpenseCategory category : EExpenseCategory.values()) {
@@ -79,12 +66,10 @@ public class ExpenseStorage {
         if (month < 10) {
             searchDateString = year + "-0" + month;
         }
-        System.out.println(searchDateString);
         List<Expense> searchMatches = new ArrayList<>();
         for (String key : expenses.keySet()) {
             String compareDate = expenses.get(key).getDate();
             String compareDateStr = compareDate.substring(0, 7);
-            System.out.println(compareDateStr);
             if (compareDateStr.equals(searchDateString)) {
                 searchMatches.add(expenses.get(key));
             }
@@ -99,9 +84,9 @@ public class ExpenseStorage {
             expenses = gson.fromJson(fr, type);
             if (expenses == null) {
                 expenses = new HashMap<>();
-                System.out.println("DEBUG EXPENSE EMPTY");
+                //System.out.println("DEBUG EXPENSE EMPTY");
             }
-            System.out.println("Expenses loaded");
+            //System.out.println("Expenses loaded");
             //listExpenses();
         } catch (Exception e) {
             System.out.println("Expenses not found!");
@@ -112,6 +97,6 @@ public class ExpenseStorage {
         FileWriter fw = new FileWriter(filePath);
         gson.toJson(expenses, fw);
         fw.close();
-        System.out.println("Expenses saved");
+        //System.out.println("Expenses saved");
     }
 }

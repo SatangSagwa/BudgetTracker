@@ -52,16 +52,17 @@ public class UserManager {
     public User getUser() {
         loadUsers();
         printUsers();
-        System.out.println("Enter ID to get: ");
-        Integer id = InputManager.intInput();
-        for (String key : users.keySet()) {
-            if (id.toString().equals(key.toString())) {
-                System.out.println(users.get(key).getFirstName() + " " + users.get(key).getLastName());
-                return users.get(key);
+
+        while (true) {
+            System.out.println("Enter ID to get: ");
+            Integer id = InputManager.intInput();
+            for (String key : users.keySet()) {
+                if (id.toString().equals(key.toString())) {
+                    return users.get(key);
+                }
             }
+            System.out.println("ID: " + id + " not found");
         }
-        System.out.println("ID: " + id + " not found");
-        return new User(null, null);
     }
 
     public void loadUsers() {
@@ -72,9 +73,8 @@ public class UserManager {
             users = gson.fromJson(fr, type);
             if (users == null) {
                 users = new HashMap<>();
-                System.out.println("DEBUG EMPTY");
             }
-            System.out.println("Users have been loaded");
+            //System.out.println("Users have been loaded");
         } catch (Exception e) {
             System.out.println("UserStorage not found");
         }
@@ -85,66 +85,6 @@ public class UserManager {
         FileWriter fileWriter = new FileWriter(filePath);
         gson.toJson(users, fileWriter);
         fileWriter.close();
-        System.out.println("Users have been saved");
+        //System.out.println("Users have been saved");
     }
-
-
-    /*
-    private final String filePath = "src/main/UserStorage.json";
-
-    public Map<Integer, User> users;
-    private int index = 1;
-
-    public UserManager() {
-        this.users = new HashMap<>();
-    }
-    DONE
-    public void addUser(User user) {
-        this.users.put(index++, user);
-        System.out.println("User added.");
-    }
-
-    public void loadUsers() {
-        Gson gson = new Gson();
-        try {
-            FileReader fr = new FileReader(filePath);
-            users = gson.fromJson(fr, HashMap.class);
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found");
-        }
-    }
-
-    public void saveUsers() throws IOException {
-        Gson gson = new Gson();
-        FileWriter fileWriter = new FileWriter(filePath);
-        gson.toJson(users, fileWriter);
-        fileWriter.close();
-        System.out.println("Users have been saved");
-    }
-    DONE
-    public Map<Integer, User> getUsers() {
-        return users;
-    }
-    DONE
-    public void printUsers() {
-        loadUsers();
-        System.out.println("USERS: ");
-        for (Integer key : users.keySet()) {
-            System.out.println(key.toString() + ": " + users.get(key).toString());
-        }
-        System.out.println("-----------------------------------------");
-    }
-    DONE
-    public User getUser(Integer ID) {
-        loadUsers();
-        for (Integer key : users.keySet()) {
-            if (ID.toString().equals(key.toString())) {
-                return users.get(key);
-            }
-        }
-        System.out.println("ID: " + ID + " not found");
-        return new User("", "");
-    }
-    */
-
 }

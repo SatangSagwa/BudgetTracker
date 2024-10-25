@@ -2,12 +2,56 @@
   "1": {
     "category": "SALES",
     "user": {
-      "firstName": "Em",
-      "lastName": "Iv",
-      "id": 2
+      "firstName": "Jacy",
+      "lastName": "B",
+      "id": 3
     },
     "amount": 500.0,
     "date": "2024-10-22",
     "id": 1
+  },
+  "2": {
+    "category": "TRANSFER",
+    "user": {
+      "firstName": "Em",
+      "lastName": "Iv",
+      "id": 2
+    },
+    "amount": 980.0,
+    "date": "2024-09-02",
+    "id": 2
+  },
+  "3": {
+    "category": "OTHER",
+    "user": {
+      "firstName": "Emilia",
+      "lastName": "Ivarsson",
+      "id": 1
+    },
+    "amount": 49.9900016784668,
+    "date": "2024-10-25",
+    "id": 3
+  },
+  "4": {
+    "category": "SALES",
+    "user": {
+      "firstName": "Emilia",
+      "lastName": "Ivarsson",
+      "id": 1
+    },
+    "amount": 500.55,
+    "date": "2024-10-25",
+    "id": 4
+  },
+  "5": {
+    "category": "SALES",
+    "user": {
+      "firstName": "Emilia",
+      "lastName": "Ivarsson",
+      "id": 1
+    },
+    "amount": 200.0,
+    "date": "2024-10-25",
+    "id": 5
   }
 }

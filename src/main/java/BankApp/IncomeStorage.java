@@ -24,17 +24,6 @@ public class IncomeStorage {
         return incomes;
     }
 
-    public void listIncomes() {
-        for (String key : incomes.keySet()) {
-            System.out.print(key + ": ");
-            System.out.printf("%s - User: %s %s - Sum: %.2f\n",
-                    incomes.get(key).getDate(),
-                    incomes.get(key).getUser().getFirstName(),
-                    incomes.get(key).getUser().getLastName(),
-                    incomes.get(key).getAmount());
-        }
-    }
-
     public void listCategories() {
         int i = 1;
         for (EIncomeCategory category : EIncomeCategory.values()) {
@@ -75,12 +64,10 @@ public class IncomeStorage {
         if (month < 10) {
             searchDateString = year + "-0" + month;
         }
-        System.out.println(searchDateString);
         List<Income> searchMatches = new ArrayList<>();
         for (String key : incomes.keySet()) {
             String compareDate = incomes.get(key).getDate();
             String compareDateStr = compareDate.substring(0, 7);
-            System.out.println(compareDateStr);
             if (compareDateStr.equals(searchDateString)) {
                 searchMatches.add(incomes.get(key));
             }
@@ -97,7 +84,7 @@ public class IncomeStorage {
                 incomes = new HashMap<>();
                 //System.out.println("DEBUG INCOMES EMPTY");
             }
-            System.out.println("Incomes loaded");
+            //System.out.println("Incomes loaded");
             //listExpenses();
         } catch (Exception e) {
             System.out.println("Incomes not found!");
@@ -108,6 +95,6 @@ public class IncomeStorage {
         FileWriter fw = new FileWriter(filePath);
         gson.toJson(incomes, fw);
         fw.close();
-        System.out.println("Incomes saved");
+        //System.out.println("Incomes saved");
     }
 }

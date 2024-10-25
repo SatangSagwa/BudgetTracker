@@ -23,7 +23,7 @@ public class InputManager {
                     } else {
                         scanner.nextLine();
                         System.out.printf("\nInvalid input!\n" +
-                                "Please enter a number or Q to quit.\n");
+                                "Please enter an integer.\n");
                     }
                 }
             }
@@ -44,7 +44,7 @@ public class InputManager {
                         else {
                             scanner.nextLine();
                             System.out.printf("\nInvalid input!\n" +
-                                    "Please enter a number between %d-%d or Q quit.\n", min, max);
+                                    "Please enter a number between %d-%d.\n", min, max);
                         }
                     } catch (InputMismatchException e) {
                         if (scanner.next().equalsIgnoreCase("q")) {
@@ -52,7 +52,7 @@ public class InputManager {
                         } else {
                             scanner.nextLine();
                             System.out.printf("\nInvalid input!\n" +
-                                    "Please enter a number between %d-%d or Q quit.\n", min, max);
+                                    "Please enter a number between %d-%d.\n", min, max);
                         }
                     }
                 }
@@ -61,49 +61,20 @@ public class InputManager {
 
 
 
-    public static Float floatInput() {
+    public static Double doubleInput() {
         while (true) {
             if (scanner.hasNext()) {
                 try {
-                    return scanner.nextFloat();
+                    return scanner.nextDouble();
                 } catch (InputMismatchException e) {
-                    if (scanner.next().equalsIgnoreCase("q")) {
-                        return -1f;
-                    } else {
-                        scanner.nextLine();
-                        System.out.printf("\nInvalid input!\n" +
-                                "Please enter a number or Q to quit.\n");
+                    scanner.nextLine();
+                    System.out.printf("\nInvalid input!\n" +
+                            "Please enter a number.\n");
                     }
                 }
             }
         }
-    }
 
-    public static float floatInput(float min, float max) {
-        while (true) {
-            if (scanner.hasNext()) {
-                try {
-                    float input = scanner.nextFloat();
-                    if (input >= min && input <= max) {
-                        return input;
-                    }
-                    else {
-                        scanner.nextLine();
-                        System.out.printf("\nInvalid input!\n" +
-                                "Please enter a number between %f-%f or Q quit.\n", min, max);
-                    }
-                } catch (InputMismatchException e) {
-                    if (scanner.next().equalsIgnoreCase("q")) {
-                        return -1;
-                    } else {
-                        scanner.nextLine();
-                        System.out.printf("\nInvalid input!\n" +
-                                "Please enter a number between %f-%f or Q quit.\n", min, max);
-                    }
-                }
-            }
-        }
-    }
 
     /*
     Metod för string input

@@ -24,10 +24,13 @@ public class Income extends Transaction {
     @Override
     public String toString() {
 
-        return  date +
-                ", id = " + id +
-                ", amount = " + amount +
-                ", user = " + user +
-                " category = " + category;
+        return  String.format("%s, ID = %s, amount = %.2f, user = %s, category = %s\n",
+                date,
+                id,
+                amount,
+                user,
+                category);
+
+
     }
 }
