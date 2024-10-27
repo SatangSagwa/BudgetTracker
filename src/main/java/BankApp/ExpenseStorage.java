@@ -17,14 +17,15 @@ public class ExpenseStorage {
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private final String filePath = "src/main/ExpenseStorage.json";
 
+    //Map of all expenses
     private Map<String, Expense> expenses = new HashMap<>();
     private Integer index = 0;
 
-    //FIX INDEX! ADD INDEX TO EXPENSE!
     public Map<String, Expense> getExpenses() {
         return expenses;
     }
 
+    //iterates and prints all Enum expense categories
     public void listCategories() {
         int i = 1;
         for (EExpenseCategory category : EExpenseCategory.values()) {
@@ -33,6 +34,14 @@ public class ExpenseStorage {
         }
     }
 
+    /*
+    Parameter expense - expense to add to expenses map
+    Loads all expenses
+    Iterates expenses map, comparing index to find the highest id.
+    Sets index to highest id + 1.
+    Puts index and expense in map
+    Saves expenses
+     */
     public void addExpense(Expense expense) throws IOException {
         loadExpenses();
         //Increase index to highest id in expenses map
@@ -48,7 +57,11 @@ public class ExpenseStorage {
         saveExpenses();
     }
 
-
+    /*
+    Param id - id of expense to remove
+    Try - remove expense with id and save
+    Catch - If id isn't found
+     */
     public void removeExpense(Integer id) {
         loadExpenses();
         try {
@@ -60,6 +73,14 @@ public class ExpenseStorage {
         }
     }
 
+    /*
+    Param year, month - year and month to search for
+    Loads expenses
+    Concatenates a date-string depending on input
+    Iterates expenses map and compares string to each expenses' date
+    If it is matching, the expense is added to a list.
+    List is returned.
+     */
     public List<Expense> findExpensesByDate(int year, int month) {
         loadExpenses();
         String searchDateString = year + "-" + month;
@@ -77,6 +98,11 @@ public class ExpenseStorage {
         return searchMatches;
     }
 
+    /*
+    Sets typetoken to return correct datatype
+    Sets expenses map to json ExpenseStorage values
+    if map is empty, it is declared as a hashmap to not cause the map to be null.
+     */
     public void loadExpenses() {
         Type type = new TypeToken<Map<String, Expense>>() {}.getType();
         try {
@@ -84,19 +110,18 @@ public class ExpenseStorage {
             expenses = gson.fromJson(fr, type);
             if (expenses == null) {
                 expenses = new HashMap<>();
-                //System.out.println("DEBUG EXPENSE EMPTY");
             }
-            //System.out.println("Expenses loaded");
-            //listExpenses();
         } catch (Exception e) {
             System.out.println("Expenses not found!");
         }
     }
 
+    /*
+    Saves expenses to json ExpenseStorage
+     */
     public void saveExpenses() throws IOException {
         FileWriter fw = new FileWriter(filePath);
         gson.toJson(expenses, fw);
         fw.close();
-        //System.out.println("Expenses saved");
     }
 }

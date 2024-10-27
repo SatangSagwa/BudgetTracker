@@ -1,57 +1,13 @@
 {
-  "2": {
-    "category": "ENTERTAINMENT",
-    "user": {
-      "firstName": "Emilia",
-      "lastName": "Ivarsson",
-      "id": 1
-    },
-    "amount": 90.0,
-    "date": "2024-10-22",
-    "id": 2
-  },
-  "4": {
+  "1": {
     "category": "SHOPPING",
     "user": {
-      "firstName": "Em",
-      "lastName": "Iv",
+      "firstName": "test",
+      "lastName": "testy",
       "id": 2
     },
-    "amount": 499.0,
-    "date": "2024-10-22",
-    "id": 4
-  },
-  "5": {
-    "category": "OTHER",
-    "user": {
-      "firstName": "Em",
-      "lastName": "Iv",
-      "id": 2
-    },
-    "amount": 370.0,
-    "date": "2024-10-22",
-    "id": 5
-  },
-  "6": {
-    "category": "OTHER",
-    "user": {
-      "firstName": "Em",
-      "lastName": "Iv",
-      "id": 2
-    },
-    "amount": 300.0,
-    "date": "2024-10-22",
-    "id": 6
-  },
-  "7": {
-    "category": "ENTERTAINMENT",
-    "user": {
-      "firstName": "Em",
-      "lastName": "Iv",
-      "id": 2
-    },
-    "amount": 399.0,
-    "date": "2023-06-20",
-    "id": 7
+    "amount": 45.99,
+    "date": "2024-10-27",
+    "id": 1
   }
 }

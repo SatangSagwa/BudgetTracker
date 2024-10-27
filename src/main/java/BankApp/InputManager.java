@@ -3,14 +3,18 @@ package BankApp;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-//Class for managing user input
 public class InputManager {
 
     private static Scanner scanner = new Scanner(System.in);
 
+
     /*
-    Metod för int input utan parametrar
-    Loopar tills användaren skriver in ett tal eller q (= -1)
+    Method overloading polymorphism
+
+    Method for int input without parameters.
+    Looping until user enters an int or q.
+    Tries to return int or -1 if q has been entered.
+    Else, prints error message and waits for new input.
      */
     public static int intInput() {
         while (true) {
@@ -30,8 +34,10 @@ public class InputManager {
         }
     }
     /*
-    Metod för int input med int parametrar
-    Loopar tills användaren skriver in ett tal mellan min och max eller q (= -1)
+    Overloaded method
+    Int input between two limit parameters - min, max.
+    Returns input if it is between min and max or q.
+    Returns -1 if q is input, else prints error message
      */
     public static int intInput(int min, int max) {
         while (true) {
@@ -59,8 +65,11 @@ public class InputManager {
             }
         }
 
-
-
+    /*
+    Double input method
+    Waits fot scanner, returns scanner double
+    or prints an error message until a double has been input
+     */
     public static Double doubleInput() {
         while (true) {
             if (scanner.hasNext()) {
@@ -77,7 +86,7 @@ public class InputManager {
 
 
     /*
-    Metod för string input
+    Returns scanner string input
      */
     public static String stringInput() {
         while (true) {

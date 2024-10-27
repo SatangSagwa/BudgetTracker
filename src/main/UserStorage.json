@@ -1,12 +1,12 @@
 {
   "1": {
-    "firstName": "Emilia",
-    "lastName": "Ivarsson",
+    "firstName": "Em",
+    "lastName": "Iv",
     "id": 1
   },
   "2": {
-    "firstName": "Java",
-    "lastName": "Bun",
+    "firstName": "test",
+    "lastName": "testy",
     "id": 2
   }
 }

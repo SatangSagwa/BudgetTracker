@@ -17,6 +17,7 @@ public class IncomeStorage {
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private final String filePath = "src/main/IncomeStorage.json";
 
+    //Map of all incomes
     private Map<String, Income> incomes = new HashMap<>();
     private Integer index = 0;
 
@@ -24,6 +25,7 @@ public class IncomeStorage {
         return incomes;
     }
 
+    //iterates and prints all Enum income categories
     public void listCategories() {
         int i = 1;
         for (EIncomeCategory category : EIncomeCategory.values()) {
@@ -32,6 +34,14 @@ public class IncomeStorage {
         }
     }
 
+    /*
+    Parameter income - income to add to incomes map
+    Loads all incomes
+    Iterates incomes map, comparing index to find the highest id.
+    Sets index to highest id + 1.
+    Puts index and income in map
+    Saves incomes
+     */
     public void addIncome(Income income) throws IOException {
         loadIncomes();
         //Increase index to highest id in expenses map
@@ -47,6 +57,11 @@ public class IncomeStorage {
         saveIncomes();
     }
 
+    /*
+    Param id - id of income to remove
+    Try - remove income with id and save
+    Catch - If id isn't found
+     */
     public void removeIncome(Integer id) {
         loadIncomes();
         try {
@@ -58,6 +73,14 @@ public class IncomeStorage {
         }
     }
 
+    /*
+    Param year, month - year and month to search for
+    Loads incomes
+    Concatenates a date-string depending on input
+    Iterates incomes map and compares string to each incomes' date
+    If it is matching, the income is added to a list.
+    List is returned.
+     */
     public List<Income> findIncomesByDate(int year, int month) {
         loadIncomes();
         String searchDateString = year + "-" + month;
@@ -75,6 +98,11 @@ public class IncomeStorage {
         return searchMatches;
     }
 
+    /*
+    Sets typetoken to return correct datatype
+    Sets incomess map to json IncomeStorage values
+    if map is empty, it is declared as a hashmap to not cause the map to be null.
+     */
     public void loadIncomes() {
         Type type = new TypeToken<Map<String, Income>>() {}.getType();
         try {
@@ -82,19 +110,16 @@ public class IncomeStorage {
             incomes = gson.fromJson(fr, type);
             if (incomes == null) {
                 incomes = new HashMap<>();
-                //System.out.println("DEBUG INCOMES EMPTY");
             }
-            //System.out.println("Incomes loaded");
-            //listExpenses();
         } catch (Exception e) {
             System.out.println("Incomes not found!");
         }
     }
 
+    //Saves incomes to json IncomeStorage
     public void saveIncomes() throws IOException {
         FileWriter fw = new FileWriter(filePath);
         gson.toJson(incomes, fw);
         fw.close();
-        //System.out.println("Incomes saved");
     }
 }

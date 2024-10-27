@@ -3,21 +3,31 @@ package BankApp;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 public class BudgetTracker {
+    //Constants
     private static final UserManager userManager = new UserManager();
     private static final ExpenseStorage expenseStorage = new ExpenseStorage();
     private static final IncomeStorage incomeStorage = new IncomeStorage();
+
+    private static final int minYear = 2020;
+    private static final int maxYear = LocalDate.now().getYear();
+    private static final int minMonth = 1;
+    private static final int maxMonth = 12;
+    private static final int minDay = 1;
+    private static final int maxDay = 31;
+
     private static User user;
 
 
     public static void main(String[] args) throws IOException {
+        //Prints start menu, checks if user exists.
+        //Adds new user if userMap is empty
+        //Else, gets input for choosing an existing user
         startMenu();
-
         while (true) {
+            //Prints start menu of options
             int option = optionMenu("start");
-
             switch (option) {
                 //Expenses
                 case 1:
@@ -34,10 +44,12 @@ public class BudgetTracker {
                             removeTransaction("expense");
                             break;
 
+                        //Edit expense
                         case 3:
                             editTransaction("expense");
                             break;
 
+                        //Change to another user
                         case 4:
                             changeUser();
                             break;
@@ -47,20 +59,22 @@ public class BudgetTracker {
                 case 2:
                     option = optionMenu("income");
                     switch (option) {
-                        //Add a new expense
+                        //Add a new income
                         case 1:
                             addTransaction("income");
                             break;
 
-                        //Remove an expense
+                        //Remove an income
                         case 2:
                             removeTransaction("income");
                             break;
 
+                        //Edit an income
                         case 3:
                             editTransaction("income");
                             break;
 
+                        //Change to another user
                         case 4:
                             changeUser();
                             break;
@@ -120,6 +134,8 @@ public class BudgetTracker {
     }
 
     /*
+    The following methods are used to increase the readability.
+
     Prints welcome message
     Loads user map
     If there are no existing users, the user is prompted to add a new user.
@@ -149,7 +165,7 @@ public class BudgetTracker {
 
     /*
     Prints menu of options depending on type parameter
-    Type cases: start expense income history user
+    Accepted type cases: start expense income history user
     Returns int input
      */
     private static int optionMenu(String type) {
@@ -210,8 +226,7 @@ public class BudgetTracker {
     }
 
     /*
-    Prints user list
-    Gets user from users map by int input for id
+    Gets user from users map by int arg for id
     Returns user with specified id
     Sets current user to returned user.
      */
@@ -222,9 +237,10 @@ public class BudgetTracker {
     }
 
     /*
-    Gets inputs for name
+    Gets inputs for first/lastname
     Instantiates new user with input values
     Adds user to users map
+    Saves user map
      */
     private static void addUser() throws IOException {
         System.out.println("Enter first name: ");
@@ -238,9 +254,9 @@ public class BudgetTracker {
     }
 
     /*
-    Gets user by id
+    Gets user by id arg
     If the user to remove is the same as the current user, it will not be removed.
-    Else, gets user list and removes user
+    Else, gets user map and removes user
     Saves users map
      */
     private static void removeUser() throws IOException {
@@ -258,6 +274,11 @@ public class BudgetTracker {
         }
     }
 
+    /*
+    Gets user to edit by ID
+    Print users current name and gets input for new first/lastname
+    Sets first and last name to respective users input values
+     */
     private static void editUser() {
         System.out.println("Choose a user to edit: ");
         User editUser = userManager.getUser();
@@ -272,6 +293,16 @@ public class BudgetTracker {
         System.out.printf("User has been changed to %s ", editUser);
     }
 
+    /*
+    Adds a transactions of String type:
+    Accepted type arguments = "expense" & "income"
+    Prints current user and gets input for sum and category
+    Gets Enum category depending on the type param
+    Gets input for yy/mm/dd or transaction
+    Try: create date with input values
+        Creates new income/expense with specified values and adds it to the respective map.
+    Catch: invalid date (ex. 31 would be accepted as day-input, but yy/02/31 is an invalid date.)
+     */
     private static void addTransaction(String type) {
         if (type.equals("expense")) {
             System.out.println("ADD EXPENSE: \n" +
@@ -297,11 +328,11 @@ public class BudgetTracker {
             category = InputManager.intInput(1, EIncomeCategory.values().length);
         }
         System.out.println("Enter year of transaction: ");
-        int year = InputManager.intInput(2000, LocalDate.now().getYear() + 50);
+        int year = InputManager.intInput(minYear, maxYear);
         System.out.println("Enter month of transaction: ");
-        int month = InputManager.intInput(1, 12);
+        int month = InputManager.intInput(minMonth, maxMonth);
         System.out.println("Enter day of transaction: ");
-        int day = InputManager.intInput(1, 31);
+        int day = InputManager.intInput(minDay, maxDay);
         try {
             LocalDate date = LocalDate.of(year, month, day);
             //Adding expense to map
@@ -319,6 +350,18 @@ public class BudgetTracker {
         }
     }
 
+    /*
+    Remove a transactions of String type:
+    Accepted type arguments = "expense" & "income"
+    Gets year and month input
+    Gets types matching expenses
+        If there are no matches
+            print no matches
+        Else
+            Iterate all matches and print each one.
+            Get int ID arg to remove
+            Iterate matches and remove element if input ID is matching the current key`s ID
+     */
     private static void removeTransaction(String type) {
         //True if match is found for specified ID
         boolean hasMatch = false;
@@ -331,9 +374,9 @@ public class BudgetTracker {
         }
 
         System.out.println("Enter year of transaction to remove: ");
-        int yearToRemove = InputManager.intInput();
+        int yearToRemove = InputManager.intInput(minYear, maxYear);
         System.out.println("Enter the month of transaction to remove: ");
-        int monthToRemove = InputManager.intInput();
+        int monthToRemove = InputManager.intInput(minDay, maxDay);
 
         //Compare the date to all expenses, add matches to list
         if (type.equals("expense")) {
@@ -391,6 +434,17 @@ public class BudgetTracker {
         }
     }
 
+    /*
+    Edit a transactions of String type:
+    Accepted type arguments = "expense" & "income"
+    Gets input for year & month of transaction to edit
+    Finds transaction matches for set type if there are matches.
+    Prints all matches
+    Gets ID to edit
+    Prints menu, gets switch option input (amount, category, user, date)
+    Gets input for new values and puts them into the specified transaction setting.
+    Saves transactions
+     */
     private static void editTransaction(String type) throws IOException {
         if (type.equals("expense")) {
             System.out.println("EDIT EXPENSE: \n" +
@@ -402,9 +456,9 @@ public class BudgetTracker {
         }
         boolean hasMatch = false;
         System.out.println("Enter year of transaction to edit: ");
-        int yearToEdit = InputManager.intInput();
+        int yearToEdit = InputManager.intInput(minYear, maxYear);
         System.out.println("Enter the month of transaction to edit: ");
-        int monthToEdit = InputManager.intInput();
+        int monthToEdit = InputManager.intInput(minMonth, maxMonth);
 
         if (type.equals("expense")) {
             List<Expense> matches = expenseStorage.findExpensesByDate(yearToEdit, monthToEdit);
@@ -426,8 +480,9 @@ public class BudgetTracker {
                         System.out.println("What would you like to edit?");
                         System.out.println("1. Amount\n" +
                                 "2. Category\n" +
-                                "3. User");
-                        int editOption = InputManager.intInput(1, 3);
+                                "3. User" +
+                                "4. Date");
+                        int editOption = InputManager.intInput(1, 4);
                         switch (editOption) {
                             case 1:
                                 //Edit amount for an expense
@@ -457,8 +512,16 @@ public class BudgetTracker {
                                 System.out.println("New user set to " + expense.getUser().getFirstName() + " " + expense.getUser().getLastName());
                                 expenseStorage.saveExpenses();
                                 break;
+
+                            case 4:
+                                System.out.printf("Current sum: %2f", expense.getAmount());
+                                System.out.println("Enter new sum: ");
+                                double newSum = InputManager.doubleInput();
+                                expense.setAmount(newSum);
+                                expenseStorage.saveExpenses();
+                                System.out.printf("New sum set to %2f", expense.getAmount());
+                                break;
                         }
-                        break;
                     }
                 }
             }
@@ -482,8 +545,9 @@ public class BudgetTracker {
                             System.out.println("What would you like to edit?");
                             System.out.println("1. Amount\n" +
                                     "2. Category\n" +
-                                    "3. User");
-                            int editOption = InputManager.intInput(1, 3);
+                                    "3. User" +
+                                    "4. Date");
+                            int editOption = InputManager.intInput(1, 4);
                             switch (editOption) {
                                 case 1:
                                     //Edit amount for an expense
@@ -492,6 +556,7 @@ public class BudgetTracker {
                                     double newAmount = InputManager.doubleInput();
                                     income.setAmount(newAmount);
                                     incomeStorage.saveIncomes();
+                                    break;
 
                                     //Edit category
                                 case 2:
@@ -502,6 +567,7 @@ public class BudgetTracker {
                                     income.setCategory(EIncomeCategory.values()[newCategory - 1]);
                                     System.out.println("New category set to " + income.getCategory());
                                     incomeStorage.saveIncomes();
+                                    break;
 
                                     //Edit user
                                 case 3:
@@ -510,6 +576,16 @@ public class BudgetTracker {
                                     income.setUser(newUser);
                                     System.out.println("New user set to " + income.getUser().getFirstName() + " " + income.getUser().getLastName());
                                     incomeStorage.saveIncomes();
+                                    break;
+
+                                case 4:
+                                    System.out.printf("Current sum: %2f", income.getAmount());
+                                    System.out.println("Enter new sum: ");
+                                    double newSum = InputManager.doubleInput();
+                                    income.setAmount(newSum);
+                                    incomeStorage.saveIncomes();
+                                    System.out.printf("New sum set to %2f", income.getAmount());
+                                    break;
                             }
                         }
                 }
@@ -517,16 +593,34 @@ public class BudgetTracker {
         }
     }
 
+    /*
+    View transactions of String type:
+    Accepted type arguments = "all", "user" & "category"
+    Gets input for year & month to search for
+    Case all:
+        Prints menu of options to view: all, all expenses, all incomes
+            Iterates and prints specified transactions
+
+    Case user:
+        Gets user by input
+        Prints all transactions with a user matching the input user
+
+    Case category:
+        Gets input for category type (expense/income
+        Prints all categories of set category type
+        Gets category input option
+        Lists Enum categories depending on the type
+        Gets ID for category
+        Iterates matches and prints all transactions with specified category.
+     */
     private static void viewTransactionHistory(String type) {
         expenseStorage.loadExpenses();
         incomeStorage.loadIncomes();
-        Map<String, Expense> expenses = expenseStorage.getExpenses();
-        Map<String, Income> incomes = incomeStorage.getIncomes();
 
         System.out.println("Enter year of transactions to view ");
-        int year = InputManager.intInput();
+        int year = InputManager.intInput(minYear, maxYear);
         System.out.println("Enter the month of transactions to view: ");
-        int month = InputManager.intInput();
+        int month = InputManager.intInput(minMonth, maxMonth);
 
         List<Expense> expenseMatches = expenseStorage.findExpensesByDate(year, month);
         List<Income> incomeMatches = incomeStorage.findIncomesByDate(year, month);
@@ -608,11 +702,11 @@ public class BudgetTracker {
             }
 
             if (!expensesFound && !incomesFound) {
-                System.out.println("No transactions found for specified date.");
+                System.out.println("No transactions found for specified date and user.");
             } else if (!expensesFound) {
-                System.out.println("No expenses found for specified date.");
+                System.out.println("No expenses found for specified date and user.");
             } else if (!incomesFound) {
-                System.out.println("No incomes found for specified date.");
+                System.out.println("No incomes found for specified date and user.");
             }
 
         } else if (type.equals("category")) {

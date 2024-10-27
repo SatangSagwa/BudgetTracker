@@ -21,9 +21,9 @@ public class Expense extends Transaction {
         this.category = category;
     }
 
+    //Polymorphism achieved by overriding
     @Override
     public String toString() {
-
         return  String.format("%s, ID = %s, amount = %.2f, user = %s, category = %s\n",
                 date,
                 id,

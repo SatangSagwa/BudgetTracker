@@ -21,6 +21,7 @@ public class Income extends Transaction {
         this.category = category;
     }
 
+    //Polymorphism achieved by overriding
     @Override
     public String toString() {
 
