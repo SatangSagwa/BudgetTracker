@@ -7,7 +7,6 @@ public class InputManager {
 
     private static Scanner scanner = new Scanner(System.in);
 
-
     /*
     Method overloading polymorphism
 

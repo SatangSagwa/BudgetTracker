@@ -42,14 +42,4 @@ public class Transaction {
     public String getDate() {
         return date;
     }
-
-    @Override
-    public String toString() {
-        return "Transaction{" +
-                "user=" + user +
-                ", amount=" + amount +
-                ", date='" + date + '\'' +
-                ", id=" + id +
-                '}';
-    }
 }
